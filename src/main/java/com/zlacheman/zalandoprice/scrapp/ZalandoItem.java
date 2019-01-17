@@ -13,12 +13,8 @@ public class ZalandoItem {
     private String url;
 
     public ZalandoItem(String url) {
-        try {
-            this.page = Jsoup.connect(url).get();
-            this.url = url;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        this.page = ScrappManager.accessWebBot(url);
+        this.url = url;
     }
 
     public ZalandoItem() {
@@ -61,6 +57,11 @@ public class ZalandoItem {
 
     public String findName() {
         return this.page.title().toUpperCase();
+    }
+
+    public static String searchURLById(String id){
+        Document page = ScrappManager.accessWebBot("https://www.zalando.fr/catalogue/?q="+id);
+        return page.select("link[rel=alternate][hreflang=fr-FR]").get(0).attr("href");
     }
 
     public void showAll(){
